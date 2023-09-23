@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grid Generator</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Grid Generator</h1>
+    <div>
+        <button id="standard">Standard</button>
+        <!-- Add other buttons here -->
+    </div>
+    <div id="grid-output">
+        <!-- The generated grid will be displayed here -->
+    </div>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script>
+		$(document).ready(function() {
+			$('#standard').click(function() {
+				$.ajax({
+					type: 'POST',
+					url: '/generate_grid',
+					data: {action: 'standard'},
+					success: function(response) {
+						// Update the grid output with the generated grid
+						const gridOutput = document.getElementById('grid-output');
+						gridOutput.innerHTML = ''; // Clear previous grid
+						for (const row of response.grid) {
+							const rowDiv = document.createElement('div');
+                            rowDiv.className = 'grid-container';
+							for (const num of row) {
+								const cell = document.createElement('div');
+                                cell.className = 'grid-cell';
+								cell.textContent = num;
+								rowDiv.appendChild(cell);
+							}
+							gridOutput.appendChild(rowDiv);
+						}
+					}
+				});
+			});
+		});
+	</script>
+
+</body>
+</html>
+
